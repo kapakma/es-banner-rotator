@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery Banner Rotator</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/banner-rotator.css" rel="stylesheet">
+    <style>
+        body {
+            height:100%;
+        }
+        section {
+            padding-top:100px;
+        }
+    </style>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.banner-rotator.js"></script>
+    <script>
+        $(window).load(function() {
+            $('#myRotator').bannerRotator({
+                width:1000,
+                height:400,
+                cpanelPosition:'center bottom',
+                navButtons:'large',
+                navThumbs:true,
+                tooltip:'image',
+                depth:'auto',
+                kbEffect:'random'
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <section>
+        <div id="myRotator" class="banner-rotator shadow">
+            <ul class="slides">
+                <li data-effect="rotate">
+                    <a href="http://www.codecanyon.net/webtako" target="_blank">
+                        <img src="images/spacer.png" data-src="images/photo1.jpg" data-thumb="images/thumbs/thumb1.jpg" title="architecture" alt=""/>
+                    </a>
+                    <h3 data-transition="flipUp 500 linear" data-effect-out="flipDown"
+                        style="top:30px;left:30px;background:#000;width:auto;height:auto;letter-spacing:20px;padding:5px 0 5px 20px;">
+                        jQuery
+                    </h3>
+                    <h3 data-transition="flipDown 500 linear 400" data-effect-out="flipUp"
+                        style="top:95px;left:30px;background:#000;width:auto;height:auto;letter-spacing:20px;padding:5px 0 5px 20px;">
+                        Banner
+                    </h3>
+                    <h3 data-transition="flipUp 500 linear 800" data-effect-out="flipDown"
+                        style="top:160px;left:30px;background:#000;width:auto;height:auto;letter-spacing:20px;padding:5px 0 5px 20px;">
+                        Rotator
+                    </h3>
+                    <h3 data-transition="spinInRight 500 linear 1200" data-effect-out="spinOutRight"
+                        style="top:225px;left:30px;background:#000;width:auto;height:auto;letter-spacing:20px;padding:5px 0 5px 20px;">
+                        v4
+                    </h3>
+                </li>
+                <li data-effect="rotate" data-columns="6" data-direction="down" data-alternate="true" data-depth="0">
+                    <a href="http://www.codecanyon.net/webtako" target="_blank">
+                        <img src="images/spacer.png" data-src="images/photo2.jpg" data-thumb="images/thumbs/thumb2.jpg" title="3D abstract art" alt=""/>
+                    </a>
+                    <h1 data-transition="slideDown 500 swing 0" data-effect-out='slideDown' 
+                        style="top:145px;left:20px;width:auto;height:auto;color:#fff;text-shadow:1px 1px 2px rgba(0,0,0,0.2);">
+                        jQuery Banner Rotator
+                    </h1>
+                    <h3 data-transition="flipDown 500 swing 0" data-transition-out="flipDown 500 swing 1000"
+                        style="top:215px;left:25px;width:auto;height:auto;background:#00ccff;background:rgba(0,204,255,0.95);padding:5px 15px;">
+                        Responsive Design
+                    </h3>
+                    <h3 data-transition="flipDown 500 swing 2000" data-transition-out="flipDown 500 swing 1000"
+                        style="top:215px;left:25px;width:auto;height:auto;background:#9966ff;background:rgba(153,102,255,0.95);padding:5px 15px;">
+                        CSS3 Transition
+                    </h3>
+                    <h3 data-transition="flipDown 500 swing 4000" data-transition-out="flipDown 500 swing"
+                        style="top:215px;left:25px;width:auto;height:auto;background:#99ff00;background:rgba(153,255,0,0.95);padding:5px 15px;">
+                        API &amp; Events Support
+                    </h3>
+                </li>
+                <li data-effect="flip" data-rows="5" data-direction="down" data-order="down" data-depth="1000" data-shape-depth="10">
+                    <a href="http://www.codecanyon.net/webtako" target="_blank">
+                        <img src="images/spacer.png" data-src="images/photo3.jpg" data-thumb="images/thumbs/thumb3.jpg" title="krazy kartoons" alt=""/>
+                    </a>
+                    <h1 data-transition='zoomIn 500 swing 0' data-effect-out='fade' 
+                        style='top:40px;right:25px;width:auto;height:auto;background:#0e65d5;box-shadow:0 0 3px rgba(0,0,0,.75);padding:10px;'>
+                        jQuery Banner Rotator
+                    </h1>
+                    <h4 data-transition='zoomIn 500 swing 400' data-effect-out='fade' 
+                        style='top:110px;right:45px;width:auto;height:auto;background:#fff;color:#333;box-shadow:0 0 3px rgba(0,0,0,.75);padding:10px;'>
+                        2D &amp; 3D transition effects available
+                    </h4>
+                    <h4 data-transition='zoomIn 500 swing 800' data-effect-out='fade' 
+                        style='top:160px;right:65px;width:auto;height:auto;background:#fff;color:#333;box-shadow:0 0 3px rgba(0,0,0,.75);padding:10px;'>
+                        Auto play on startup with adjustable timer
+                    </h4>
+                    <h4 data-transition='zoomIn 500 swing 1200' data-effect-out='fade' 
+                        style='top:210px;right:25px;width:auto;height:auto;background:#fff;color:#333;box-shadow:0 0 3px rgba(0,0,0,.75);padding:10px;'>
+                        Different image position &amp; scaling mode
+                    </h4>
+                    <h4 data-transition='zoomIn 500 swing 1600' data-effect-out='fade' 
+                        style='top:260px;right:65px;width:auto;height:auto;background:#fff;color:#333;box-shadow:0 0 3px rgba(0,0,0,.75);padding:10px;'>
+                        Ken Burns effects supported
+                    </h4>
+                </li>
+                <li data-effect="flip" data-columns="5" data-rows="3" data-direction="random" data-order="downRight" data-depth="1000">
+                    <a href="http://www.codecanyon.net/webtako" target="_blank">
+                        <img src="images/spacer.png" data-src="images/photo4.jpg" data-thumb="images/thumbs/thumb4.jpg" title="say it in print" alt=""/>
+                    </a>
+                    <h2 data-transition='slideUp 500 swing 0' data-transition-out='slideUp'
+                        style='top:20px;left:20px;width:auto;height:auto;color:#fff;background:#3095fc;padding:10px;'>
+                        jQuery Banner Rotator
+                    </h2>
+                    <h4 data-transition='slideLeft 500 swing 500' data-transition-out='slideLeft'
+                        style='top:90px;left:20px;width:auto;height:auto;color:#333;background:#fff;background:rgba(255,255,255,0.9);padding:10px;'>
+                        Thumbnails available in number, text, image, or bullets
+                    </h4>
+                    <h4 data-transition='slideRight 500 swing 500' data-transition-out='slideRight'
+                        style='top:140px;left:20px;width:auto;height:auto;color:#333;background:#fff;background:rgba(255,255,255,0.9);padding:10px;'>
+                        Tooltip supports text, html, or image
+                    </h4>
+                    <h4 data-transition='slideLeft 500 swing 500' data-transition-out='slideLeft'
+                        style='top:190px;left:20px;width:auto;height:auto;color:#333;background:#fff;background:rgba(255,255,255,0.9);padding:10px;'>
+                        Control panel can be aligned horizontally or vertically
+                    </h4>
+                    <h4 data-transition='slideRight 500 swing 500' data-transition-out='slideRight'
+                        style='top:240px;left:20px;width:auto;height:auto;color:#333;background:#fff;background:rgba(255,255,255,0.9);padding:10px;'>
+                        Previous &amp; next image preview available
+                    </h4>
+                </li>
+                <li data-effect="zoom">
+                    <a href="http://www.codecanyon.net/webtako" target="_blank">
+                        <img src="images/spacer.png" data-src="images/photo5.jpg" data-thumb="images/thumbs/thumb5.jpg" title="3D abstract art" alt=""/>
+                    </a>
+                    <h2 data-transition='fade 500 swing 0' data-effect-out='zoomOut'
+                        style="top:45px;right:15px;width:auto;height:auto;background:#0054ff;background:rgba(0,84,255,0.7);padding:10px;">
+                        jQuery Banner Rotator
+                    </h2>
+                    <h4 data-transition='fade 500 swing 600' data-effect-out='zoomOut'
+                        style='top:110px;right:15px;width:auto;height:auto;background:#000;background:rgba(0,0,0,0.75);padding:10px;'>
+                        customizable control elements
+                    </h4>
+                    <h4 data-transition='fade 500 swing 300' data-effect-out='zoomOut'
+                        style='top:160px;right:15px;width:auto;height:auto;background:#000;background:rgba(0,0,0,0.75);padding:10px;'>
+                        keyboard &amp; mousewheel control available
+                    </h4>
+                    <h4 data-transition='fade 500 swing 900' data-effect-out='zoomOut'
+                        style='top:210px;right:15px;width:auto;height:auto;background:#000;background:rgba(0,0,0,0.75);padding:10px;'>
+                        support for touchscreen swipe
+                    </h4>
+                </li>
+                <li data-effect="push" data-columns="6" data-direction="down" data-alternate="true">
+                    <a href="http://www.codecanyon.net/webtako" target="_blank">
+                        <img src="images/spacer.png" data-src="images/photo6.jpg" data-thumb="images/thumbs/thumb6.jpg" title="3D objects" alt=""/>
+                    </a>
+                    <div data-effect='moveRight' data-effect-out='moveLeft' 
+                        style='top:0;left:0;width:245px;height:370px;padding:15px;font-size:16px;color:#fff;background:#000;background:rgba(0,0,0,0.75)'>
+                        <br/>
+                        <p><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan molestie nisi.</strong></p>
+                        <br/>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <p>Sed accumsan molestie nisi.</p>
+                        <p>Nullam lacinia ipsum quis est tempus et adipiscing diam ornare.</p>
+                        <p>Cras nec tortor rhoncus dui blandit bibendum eget a augue.</p>
+                        <p>Quisque at mi in dolor auctor faucibus in et purus.</p>
+                    </div>
+                    <h2 data-effect='moveDown' data-effect-out='moveUp' style='top:125px;left:700px;width:auto;height:auto;text-shadow:1px 1px 2px rgba(0,0,0,0.2);'>
+                        jQuery Banner<br/>Rotator
+                    </h2>
+                    <a href="http://codecanyon.net/item/jquery-banner-rotator-slideshow/109046" 
+                        class="btn btn-primary btn-large"
+                        data-effect='moveUp' data-effect-out='moveDown' 
+                        style='top:225px;left:700px;width:auto;height:auto;'>Purchase Item &raquo;</a>
+                </li>
+                <li data-effect="random" data-columns="5" data-rows="3">
+                    <a href="http://www.codecanyon.net/webtako" target="_blank">
+                        <img src="images/spacer.png" data-src="images/photo7.jpg" data-thumb="images/thumbs/thumb7.jpg" title="building" alt=""/>
+                    </a>
+                    <h2 data-transition='shiftLeft 500 swing 0' data-effect-out='zoomOut' 
+                        style='top:60px;left:30px;width:auto;height:auto;color:#fff;background:#d11d1d;background:rgba(209,29,29,0.95);padding:10px;'>
+                        jQuery Banner Rotator
+                    </h2>
+                    <h4 data-transition='shiftLeft 500 swing 300' data-effect-out='zoomOut'
+                        style='top:130px;left:30px;width:auto;height:auto;color:#333;background:#fff;background:rgba(255,255,255,0.9);padding:10px;'>
+                        follow me on <a href="https://twitter.com/webtako" target="_blank">twitter</a>
+                    </h4>
+                    <h4 data-transition='shiftLeft 500 swing 600' data-effect-out='zoomOut' 
+                        style='top:180px;left:30px;width:auto;height:auto;color:#333;background:#fff;background:rgba(255,255,255,0.9);padding:10px;'>
+                        follow me on <a href="http://codecanyon.net/user/webtako/follow" target="_blank">codecanyon</a>
+                    </h4>
+                    <h4 data-transition='shiftLeft 500 swing 900' data-effect-out='zoomOut' 
+                        style='top:230px;left:30px;width:auto;height:auto;color:#333;background:#fff;background:rgba(255,255,255,0.9);padding:10px;'>
+                        copyright &copy; 2015 <a href="http://codecanyon.net/user/webtako" target="_blank">webtako</a>
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <br/>
+    <hr/>
+    <footer>
+        <div class="col-md-12">
+            <p class="pull-right">copyright &copy; 2015 webtako</p>
+            <p><a href="http://codecanyon.net/user/webtako?ref=webtako" target="_blank">envato</a> / <a href="http://www.twitter.com/webtako" target="_blank">twitter</a></p>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
