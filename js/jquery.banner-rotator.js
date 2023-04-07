@@ -1,7 +1,10 @@
 /**
- * jQuery Banner Rotator v4.1.2
- * Copyright (c) 2015 Allan Ma (http://codecanyon.net/user/webtako)
+ * JS Banner Rotator v5
+ * Copyright (c) 2023 Allan Ma
  */
+
+"use strict";
+
 (function($) {
 	var PRESETS = {};
 
@@ -1090,7 +1093,8 @@
 				flip = ('downLeft' === order || 'upRight' === order);
 
 			while (start != end) {
-				i = Math.min(this._rows - 1, start);
+				let i = Math.min(this._rows - 1, start);
+				let j;
 				while(i >= 0) {
 					if (flip) {
 						j = (this._columns - 1) - Math.abs(i - start);
@@ -3023,7 +3027,7 @@
 									})
 									.on('mousemove' + this._namespace, $.proxy(function(e) {
 										var pct = (e[pagePos] - this._$thumbPanel.offset()[pos])/this._$thumbPanel[dim]();
-											prop = {};
+										const prop = {};
 										prop[pos] = this._$thumbPanel.data('range') * pct;
 										this._$thumbList.animate(prop, {duration:Rotator.ANIMATE_SPEED, easing:easing, queue:false});
 									}, this));
