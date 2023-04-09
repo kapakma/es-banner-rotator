@@ -1,26 +1,26 @@
 import Timer from './Timer.js';
 
 //Bar Timer Class
-BarTimer.prototype = new Timer();
-BarTimer.prototype.constructor = BarTimer;
-
-function BarTimer(context, opts) {
+function BarTimer(context, options) {
     if (this instanceof BarTimer) {
-        Timer.call(this, context, opts);
+        Timer.call(this, context, options);
         this._$bar = $('<div/>');
         this._$timer.addClass('br-bar-timer').addClass(/bottom/i.test(opts.position) ? 'br-bottom' : 'br-top').append(this._$bar);
     }
     else {
-        return new BarTimer(context, opts);
+        return new BarTimer(context, options);
     }
 }
+
+BarTimer.prototype = Object.create(Timer.prototype);
+BarTimer.prototype.constructor = BarTimer;
 
 BarTimer.prototype.start = function(delay) {
     if (this._complete) {
         this._delay = delay;
     }
 
-    this._startTime = $.now();
+    this._startTime = Date.now();
     this._$bar.transition({width:'101%'}, delay, 'linear');
     Timer.prototype.start.call(this);
 };
@@ -28,15 +28,13 @@ BarTimer.prototype.start = function(delay) {
 BarTimer.prototype.stop = function() {
     this._elapsed = 0;
     this._$bar.stopTransition(true).width(0);
-
     Timer.prototype.stop.call(this);
 };
 
 BarTimer.prototype.pause = function() {
     this._$bar.stopTransition(true);
-    this._elapsed += ($.now() - this._startTime);
-    this._$bar.width((this._elapsed/this._delay * 101) + '%');
-    
+    this._elapsed += Date.now() - this._startTime;
+    this._$bar.width(`${this._elapsed/this._delay * 101}%`);
     Timer.prototype.pause.call(this);
 };
 
