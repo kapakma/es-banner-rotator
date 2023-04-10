@@ -1,3 +1,5 @@
+import { SUPPORT } from '../constants.js';
+
 // shuffle elements
 export function shuffleElements ($el) {
   const items = $el.children().toArray();
