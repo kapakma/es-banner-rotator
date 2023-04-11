@@ -1,4 +1,4 @@
-import { isAndroid, isChrome, getKeys, styleSupport, propertySupport, filterSupport, addPresets } from './util/util.js';
+import { getTransformProperty, isAndroid, isChrome, getKeys, styleSupport, propertySupport, filterSupport, addPresets } from './util/util.js';
 
 export const SUPPORT = {};
 export let PREFIX;
@@ -140,3 +140,5 @@ export const CUBIC_BEZIER = {
 		SIDES = getKeys(OPPOSITE_SIDE);
 	}());
 
+export const FROM_KEYFRAME = '0% { ' + getTransformProperty('translateZ(0px)') + ' } ';
+export const TO_KEYFRAME = '10' + FROM_KEYFRAME;
