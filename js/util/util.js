@@ -1,4 +1,4 @@
-import { SUPPORT } from '../constants.js';
+import { SUPPORT, PREFIXES } from '../constants.js';
 
 // shuffle elements
 export function shuffleElements ($el) {
