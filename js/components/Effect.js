@@ -2,27 +2,26 @@ import { getKeys, roundTo, degreesToRadians, getPosInt, capitalize, getNonNegInt
 import { SUPPORT, PRESETS, PREFIX } from '../constants.js';
 
 // Effect Class
-function Effect(context) {
+function Effect (context) {
   if (this instanceof Effect) {
     if (context) {
       this._timeout = null;
       this._requestId = null;
       this._context = context;
-      this._$container = $('<div/>', {'class':'br-effects'}).appendTo(this._context._$screen);
+      this._$container = $('<div/>', { class: 'br-effects' }).appendTo(this._context._$screen);
       this._transform = this._context._transform;
       this._support3d = SUPPORT.transform3d && SUPPORT.preserve3d && this._context._cssTransition;
     }
-  }
-  else {
+  } else {
     return new Effect(context);
   }
 }
 
 // create elements
-Effect.prototype.createElements = function() {
-  var total = this._rows * this._columns,
-  inner = this._is3D ? Effect.CUBOID : Effect.PLANE,
-  content = '';
+Effect.prototype.createElements = function () {
+  let total = this._rows * this._columns;
+  const inner = this._is3D ? Effect.CUBOID : Effect.PLANE;
+  let content = '';
 
   while (total--) {
     content += '<div class="br-effect">' + inner + '</div>';
@@ -31,18 +30,18 @@ Effect.prototype.createElements = function() {
   this._$el = this._$container.children();
 
   if (this._shapeColor) {
-    this._$el.find('>.br-shape').children().css({backgroundColor:this._shapeColor});
+    this._$el.find('>.br-shape').children().css({ backgroundColor: this._shapeColor });
   }
 };
 
 // set elements
-Effect.prototype.initElements = function() {
-  var $curr = this.getCurrImage(),
-  currTop = $curr.position().top,
-  currLeft = $curr.position().left,
-  $prev = this.getPrevImage(),
-  prevTop, 
-  prevLeft;
+Effect.prototype.initElements = function () {
+  const $curr = this.getCurrImage();
+  const currTop = $curr.position().top;
+  const currLeft = $curr.position().left;
+  const $prev = this.getPrevImage();
+  let prevTop;
+  let prevLeft;
 
   if ($prev) {
     prevTop = $prev.position().top;
@@ -50,21 +49,21 @@ Effect.prototype.initElements = function() {
   }
 
   this.addImage();
-  var availHeight = this._$container.height();
-  for (var i = 0; i < this._rows; i++) {
-    var availWidth = this._$container.width(),
-    height = Math.min(this._height, availHeight);
+  let availHeight = this._$container.height();
+  for (let i = 0; i < this._rows; i++) {
+    let availWidth = this._$container.width();
+    const height = Math.min(this._height, availHeight);
     availHeight -= height;
-    for (var j = 0; j < this._columns; j++) {
-      var width = Math.min(this._width, availWidth),
-      top = i * this._height,
-      left = j * this._width,
-      $el = this._$el.eq(i * this._columns + j),
-      $shape = $($el[0].firstChild);
+    for (let j = 0; j < this._columns; j++) {
+      const width = Math.min(this._width, availWidth);
+      const top = i * this._height;
+      const left = j * this._width;
+      const $el = this._$el.eq(i * this._columns + j);
+      const $shape = $($el[0].firstChild);
 
-      $el.css({top:top, left:left, width:width, height:height});
-      $shape.find('>.br-prev-side>img').css({left:(prevLeft - left), top:(prevTop - top)}).end()
-      .find('>.br-active-side>img').css({left:(currLeft - left), top:(currTop - top)});
+      $el.css({ top, left, width, height });
+      $shape.find('>.br-prev-side>img').css({ left: (prevLeft - left), top: (prevTop - top) }).end()
+        .find('>.br-active-side>img').css({ left: (currLeft - left), top: (currTop - top) });
 
       if (this._is3D) {
         this.setCuboid($shape, width, height, $el.data('depth'));
@@ -74,15 +73,15 @@ Effect.prototype.initElements = function() {
     }
   }
 
-  this._$el.css({visibility:'visible'});
+  this._$el.css({ visibility: 'visible' });
 
   if (this._hideItems) {
-    this._context._$items.css({visibility:'hidden'});
+    this._context._$items.css({ visibility: 'hidden' });
   }
 };
 
 // clear elements
-Effect.prototype.clear = function() {
+Effect.prototype.clear = function () {
   clearTimeout(this._timeout);
   cancelAnimationFrame(this._requestId);
   this._$container.empty();
@@ -90,16 +89,14 @@ Effect.prototype.clear = function() {
 };
 
 // get type
-Effect.prototype.getType = function() {
-  if (1 < this._rows) {
-    if (1 < this._columns) {
+Effect.prototype.getType = function () {
+  if (this._rows > 1) {
+    if (this._columns > 1) {
       return Effect.GRID;
-    }
-    else {
+    } else {
       return Effect.ROW;
     }
-  }
-  else if (1 < this._columns) {
+  } else if (this._columns > 1) {
     return Effect.COLUMN;
   }
 
@@ -107,8 +104,8 @@ Effect.prototype.getType = function() {
 };
 
 // init order
-Effect.prototype.initOrder = function() {
-  if (0 > $.inArray(this._order, Effect.ORDERS)) {
+Effect.prototype.initOrder = function () {
+  if ($.inArray(this._order, Effect.ORDERS) < 0) {
     this._order = 'right';
   }
 
@@ -118,8 +115,8 @@ Effect.prototype.initOrder = function() {
 };
 
 // init direction
-Effect.prototype.initDirection = function() {
-  if (0 > $.inArray(this._direction, ['up', 'down', 'left', 'right', 'random'])) {
+Effect.prototype.initDirection = function () {
+  if ($.inArray(this._direction, ['up', 'down', 'left', 'right', 'random']) < 0) {
     this._direction = 'right';
   }
 
@@ -129,7 +126,7 @@ Effect.prototype.initDirection = function() {
 };
 
 // get opposite
-Effect.prototype.getOpposite = function(val) {
+Effect.prototype.getOpposite = function (val) {
   if (val in Effect.OPPOSITE) {
     return Effect.OPPOSITE[val];
   }
@@ -137,70 +134,68 @@ Effect.prototype.getOpposite = function(val) {
 };
 
 // get current image
-Effect.prototype.getCurrImage = function() {
+Effect.prototype.getCurrImage = function () {
   if (this._context._$currItem) {
     return this._context._$currItem.find('>img.br-img');
   }
 };
 
 // get previous image
-Effect.prototype.getPrevImage = function() {
+Effect.prototype.getPrevImage = function () {
   if (this._context._$prevItem) {
     return this._context._$prevItem.find('>img.br-img');
   }
 };
 
 // add element's image
-Effect.prototype.addImage = function() {
-  $.each({'>.br-active-side': this.getCurrImage(), '>.br-prev-side': this.getPrevImage()}, 
-    $.proxy(function(selector, $img) {
+Effect.prototype.addImage = function () {
+  $.each({ '>.br-active-side': this.getCurrImage(), '>.br-prev-side': this.getPrevImage() },
+    $.proxy(function (selector, $img) {
       if ($img && $img.length) {
-        var rect = $img[0].getBoundingClientRect(),
-        width = rect.width || $img.width(),
-        height = rect.height || $img.height(),
-        $newImg = $('<img/>', {src:$img.attr('src'), alt:'', css:{width:width, height:height}});
+        const rect = $img[0].getBoundingClientRect();
+        const width = rect.width || $img.width();
+        const height = rect.height || $img.height();
+        const $newImg = $('<img/>', { src: $img.attr('src'), alt: '', css: { width, height } });
         this._$el.find('>.br-shape').find(selector).html($newImg);
       }
     }, this));
 };
 
 // set cuboid
-Effect.prototype.setCuboid = function($cuboid, width, height, depth) {
-  var widthZ  = 'translateZ(' + (width/2)  + 'px)',
-  heightZ = 'translateZ(' + (height/2) + 'px)',
-  depthZ  = 'translateZ(' + (depth/2)  + 'px)',
-  left = (width - depth)/2,
-  top = (height - depth)/2,
-  invert = $cuboid.find('>.br-face-back').hasClass('br-inverted') ? 'rotate(180deg) ' : '';
+Effect.prototype.setCuboid = function ($cuboid, width, height, depth) {
+  const widthZ = 'translateZ(' + (width / 2) + 'px)';
+  const heightZ = 'translateZ(' + (height / 2) + 'px)';
+  const depthZ = 'translateZ(' + (depth / 2) + 'px)';
+  const left = (width - depth) / 2;
+  const top = (height - depth) / 2;
+  const invert = $cuboid.find('>.br-face-back').hasClass('br-inverted') ? 'rotate(180deg) ' : '';
 
-  $cuboid.find('>.br-face-front').css({transform:depthZ}).end()
-  .find('>.br-face-back').css({transform:'rotateY(180deg) ' + invert + depthZ}).end()
-  .find('>.br-face-left').css({width:depth, left:left, transform:'rotateY(-90deg) ' + widthZ}).end()
-  .find('>.br-face-right').css({width:depth, left:left, transform:'rotateY(90deg) ' + widthZ}).end()
-  .find('>.br-face-top').css({height:depth, top:top, transform:'rotateX(90deg) ' + heightZ}).end()
-  .find('>.br-face-bottom').css({height:depth, top:top, transform:'rotateX(-90deg) ' + heightZ});
+  $cuboid.find('>.br-face-front').css({ transform: depthZ }).end()
+    .find('>.br-face-back').css({ transform: 'rotateY(180deg) ' + invert + depthZ }).end()
+    .find('>.br-face-left').css({ width: depth, left, transform: 'rotateY(-90deg) ' + widthZ }).end()
+    .find('>.br-face-right').css({ width: depth, left, transform: 'rotateY(90deg) ' + widthZ }).end()
+    .find('>.br-face-top').css({ height: depth, top, transform: 'rotateX(90deg) ' + heightZ }).end()
+    .find('>.br-face-bottom').css({ height: depth, top, transform: 'rotateX(-90deg) ' + heightZ });
 };
 
 // update keyframes
-Effect.prototype.updateKeyframes = function() {
-  var sheet = this._context._sheet,
-  index = this._context._activeIndex,
-  size, arr, pct,
-  offset = 0;
+Effect.prototype.updateKeyframes = function () {
+  const sheet = this._context._sheet;
+  const index = this._context._activeIndex;
+  let size; let arr; let pct;
+  let offset = 0;
 
   if ($.isNumeric(this._depth)) {
     size = this._depth;
     arr = [0, 1, 0];
     pct = ['0%', '50%', '100%'];
-  }
-  else {
-    if ('flip' === this._effect) {
-      size = ('up' === this._direction || 'down' === this._direction ? this._height : this._width)/2;
+  } else {
+    if (this._effect === 'flip') {
+      size = (this._direction === 'up' || this._direction === 'down' ? this._height : this._width) / 2;
       arr = Effect.SINES;
       pct = Effect.FLIP_PCT;
-    }
-    else {
-      size = this._$el.data('depth')/2;
+    } else {
+      size = this._$el.data('depth') / 2;
       offset = size;
       size /= Math.cos(degreesToRadians(45));
       arr = Effect.COSINES;
@@ -208,11 +203,11 @@ Effect.prototype.updateKeyframes = function() {
     }
   }
 
-  var length = arr.length,
-  rule = '@' + PREFIX + 'keyframes ' + ('br-' + this._context._uid + '-' + index) + ' { ';
+  const length = arr.length;
+  let rule = '@' + PREFIX + 'keyframes ' + ('br-' + this._context._uid + '-' + index) + ' { ';
 
-  for (var i = 0; i < length; i++) {
-    var val = (arr[i] * size);
+  for (let i = 0; i < length; i++) {
+    const val = (arr[i] * size);
     rule += (pct[i] + ' { ' + getTransformProperty('translateZ(' + Math.min(0, offset - val) + 'px)') + ' } ');
   }
   rule += '} ';
@@ -220,62 +215,66 @@ Effect.prototype.updateKeyframes = function() {
   try {
     sheet.deleteRule(index);
     sheet.insertRule(rule, index);
-  }
-  catch (err) {
+  } catch (err) {
   }
 };
 
 // animate elements
-Effect.prototype.animate = function(elArray, duration, easing) {
+Effect.prototype.animate = function (elArray, duration, easing) {
   if (this._is3D) {
     this.updateKeyframes();
 
     if (this._shapeShading) {
-      var shadeDuration = ('flip' === this._effect ? duration/2 : duration);
-      this._$el.find('>.br-shape>.br-prev-side').each(function() {
-        $('<div/>', {'class':'br-shading'}).animation('br-shade-in', 
-          {duration:shadeDuration, easing:easing, playState:'paused', complete:function(e) {
-            e.stopPropagation();
-          }}).appendTo($(this));
+      const shadeDuration = (this._effect === 'flip' ? duration / 2 : duration);
+      this._$el.find('>.br-shape>.br-prev-side').each(function () {
+        $('<div/>', { class: 'br-shading' }).animation('br-shade-in',
+          {
+            duration: shadeDuration,
+            easing,
+            playState: 'paused',
+            complete: function (e) {
+              e.stopPropagation();
+            }
+          }).appendTo($(this));
       });
     }
   }
 
-  var props = {duration:duration, easing:easing};
-  this._requestId = requestAnimationFrame($.proxy(function() {
+  const props = { duration, easing };
+  this._requestId = requestAnimationFrame($.proxy(function () {
     this.animateElement(elArray, props);
   }, this));
 };
 
 // animate active element
-Effect.prototype.animateElement = function(elArray, options) {
-  var $el = $(elArray.shift()),
-  selector = $el.data('selector'),
-  $active = (selector ? $el.find(selector) : $el),
-  promises = [],
-  isLast = !elArray.length;
+Effect.prototype.animateElement = function (elArray, options) {
+  const $el = $(elArray.shift());
+  const selector = $el.data('selector');
+  const $active = (selector ? $el.find(selector) : $el);
+  const promises = [];
+  const isLast = !elArray.length;
 
   if (this._is3D) {
-    var opts = $.extend({}, options);
+    const opts = $.extend({}, options);
     if (isLast) {
-      var d2 = $.Deferred();
+      const d2 = $.Deferred();
       promises.push(d2.promise());
-      opts.complete = function() { 
-        d2.resolve(); 
+      opts.complete = function () {
+        d2.resolve();
       };
     }
     $el.animation('br-' + this._context._uid + '-' + this._context._activeIndex, opts)
-    .find('>.br-shape>.br-prev-side>.br-shading').css({animationPlayState:'running'});
+      .find('>.br-shape>.br-prev-side>.br-shading').css({ animationPlayState: 'running' });
   }
 
   if (isLast) {
-    var d1 = $.Deferred();
+    const d1 = $.Deferred();
     promises.push(d1.promise());
-    options.complete = function() { 
-      d1.resolve(); 
+    options.complete = function () {
+      d1.resolve();
     };
 
-    $.when.apply(null, promises).always($.proxy(function() {
+    $.when.apply(null, promises).always($.proxy(function () {
       this._context.activateItem(false);
       this._$container.empty();
       this._progress = false;
@@ -285,39 +284,38 @@ Effect.prototype.animateElement = function(elArray, options) {
   $active.transition($el.data('to'), options);
 
   if (!isLast) {
-    this._timeout = setTimeout($.proxy(function() {
-      this._requestId = requestAnimationFrame($.proxy(function() {
+    this._timeout = setTimeout($.proxy(function () {
+      this._requestId = requestAnimationFrame($.proxy(function () {
         this.animateElement(elArray, options);
       }, this));
     }, this), this._interval);
   }
 };
 
-Effect.prototype.getPromises = function() {
-  var promises = [];
-  this.getCurrImage().add(this.getPrevImage()).each(function(n, el) {
-    var $el = $(el);
+Effect.prototype.getPromises = function () {
+  const promises = [];
+  this.getCurrImage().add(this.getPrevImage()).each(function (n, el) {
+    const $el = $(el);
     if ($el && $el.length) {
-      var $img = $el.clone(),
-      img = $img[0];
+      const $img = $el.clone();
+      const img = $img[0];
 
       if (typeof img.readyState !== 'undefined') {
-        if ('complete' === img.readyState) {
+        if (img.readyState === 'complete') {
           return false;
         }
-      }
-      else if (img.complete) {
+      } else if (img.complete) {
         return false;
       }
 
-      var deferred = $.Deferred();
+      const deferred = $.Deferred();
       promises.push(deferred.promise());
-      $img.brHandleImage($img.attr('src'), { 
-        complete: function() {
+      $img.brHandleImage($img.attr('src'), {
+        complete: function () {
           deferred.resolve();
         },
-        error: function() { 
-          deferred.reject(); 
+        error: function () {
+          deferred.reject();
         }
       });
     }
@@ -326,42 +324,42 @@ Effect.prototype.getPromises = function() {
   return promises;
 };
 
-Effect.prototype.inProgress = function() {
+Effect.prototype.inProgress = function () {
   return this._progress;
 };
 
 // get ordered element array
-Effect.prototype.getElementArray = function() {
-  var elements;
+Effect.prototype.getElementArray = function () {
+  let elements;
   switch (this._order) {
-  case 'up':
-  case 'down':
-  case 'left':
-  case 'right':
-    elements = this.getDirectionalArray(this._order);
-    break;
-  case 'upLeft':
-  case 'upRight':
-  case 'downLeft':
-  case 'downRight':
-    elements = this.getDiagonalArray(this._order);
-    break;
-  case 'spiralIn':
-  case 'spiralOut':
-    elements = this.getSpiralArray();
-    break;
-  case 'zigZagUp':
-  case 'zigZagDown':
-  case 'zigZagLeft':
-  case 'zigZagRight':
-    elements = this.getZigZagArray(this._order);
-    break;
-  case 'random':
-    elements  = this._$el.toArray();
-    shuffleArray(elements);
-    break;
-  default:
-    elements  = this._$el.toArray();
+    case 'up':
+    case 'down':
+    case 'left':
+    case 'right':
+      elements = this.getDirectionalArray(this._order);
+      break;
+    case 'upLeft':
+    case 'upRight':
+    case 'downLeft':
+    case 'downRight':
+      elements = this.getDiagonalArray(this._order);
+      break;
+    case 'spiralIn':
+    case 'spiralOut':
+      elements = this.getSpiralArray();
+      break;
+    case 'zigZagUp':
+    case 'zigZagDown':
+    case 'zigZagLeft':
+    case 'zigZagRight':
+      elements = this.getZigZagArray(this._order);
+      break;
+    case 'random':
+      elements = this._$el.toArray();
+      shuffleArray(elements);
+      break;
+    default:
+      elements = this._$el.toArray();
   }
 
   if (this._isReverse) {
@@ -371,9 +369,9 @@ Effect.prototype.getElementArray = function() {
   return elements;
 };
 
-Effect.prototype.setFn = function(fn, dir) {
-  var setter = 'set' + capitalize(fn), 
-  name = setter + capitalize(dir);
+Effect.prototype.setFn = function (fn, dir) {
+  const setter = 'set' + capitalize(fn);
+  let name = setter + capitalize(dir);
 
   if (!$.isFunction(this[name])) {
     name = setter + capitalize(this._direction);
@@ -381,22 +379,22 @@ Effect.prototype.setFn = function(fn, dir) {
   return name;
 };
 
-Effect.prototype.setAlternate = function(fn) {
+Effect.prototype.setAlternate = function (fn) {
   this[this.setFn(fn, this._direction)](this._$el.filter(':even'));
   this[this.setFn(fn, this.getOpposite(this._direction))](this._$el.filter(':odd'));
 };
 
-Effect.prototype.setRandomDirection = function($el, fn, directions) {
+Effect.prototype.setRandomDirection = function ($el, fn, directions) {
   if (!directions) {
     directions = ['up', 'down', 'left', 'right'];
   }
 
-  $el.each(function() {
-    $(this).data({dir:getRandomItem(directions)}); 
+  $el.each(function () {
+    $(this).data({ dir: getRandomItem(directions) });
   });
 
-  $.each(directions, $.proxy(function(i, dir) {
-    var $items = $el.filter(function() { 
+  $.each(directions, $.proxy(function (i, dir) {
+    const $items = $el.filter(function () {
       return $(this).data('dir') === dir;
     });
     this[this.setFn(fn, dir)]($items);
@@ -404,60 +402,59 @@ Effect.prototype.setRandomDirection = function($el, fn, directions) {
 };
 
 // cover helper
-Effect.prototype.setCoverDown = function($el) {
+Effect.prototype.setCoverDown = function ($el) {
   this.setPush($el, 'hidden', 'Y', true);
 };
 
-Effect.prototype.setCoverUp = function($el) {
+Effect.prototype.setCoverUp = function ($el) {
   this.setPush($el, 'hidden', 'Y', false);
 };
 
-Effect.prototype.setCoverRight = function($el) {
+Effect.prototype.setCoverRight = function ($el) {
   this.setPush($el, 'hidden', 'X', true);
 };
 
-Effect.prototype.setCoverLeft = function($el) {
+Effect.prototype.setCoverLeft = function ($el) {
   this.setPush($el, 'hidden', 'X', false);
 };
 
-Effect.prototype.setCoverRandom = function($el) {
+Effect.prototype.setCoverRandom = function ($el) {
   this.setRandomDirection($el, 'cover');
 };
 
 // push helper
-Effect.prototype.setPushDown = function($el) {
+Effect.prototype.setPushDown = function ($el) {
   this.setPush($el, 'visible', 'Y', true);
 };
 
-Effect.prototype.setPushUp = function($el) {
+Effect.prototype.setPushUp = function ($el) {
   this.setPush($el, 'visible', 'Y', false);
 };
 
-Effect.prototype.setPushRight = function($el) {
+Effect.prototype.setPushRight = function ($el) {
   this.setPush($el, 'visible', 'X', true);
 };
 
-Effect.prototype.setPushLeft = function($el) {
+Effect.prototype.setPushLeft = function ($el) {
   this.setPush($el, 'visible', 'X', false);
 };
 
-Effect.prototype.setPushRandom = function($el) {
+Effect.prototype.setPushRandom = function ($el) {
   this.setRandomDirection($el, 'push');
 };
 
-Effect.prototype.setPush = function($el, visibility, axis, fwd) {
-  var active  = 'front', 
-  prev = 'back',
-  dim = ('Y' === axis ? 'height' : 'width'),
-  from, to;
+Effect.prototype.setPush = function ($el, visibility, axis, fwd) {
+  let active = 'front';
+  let prev = 'back';
+  const dim = (axis === 'Y' ? 'height' : 'width');
+  let from; let to;
 
   if (this._transform) {
-    var translate = 'translate' + axis;
-    from = {transform:translate + '(-50%)'};
-    to = {transform:translate + '(0)'};
-  }
-  else {
-    var pos = ('Y' === axis ? 'top' : 'left');
+    const translate = 'translate' + axis;
+    from = { transform: translate + '(-50%)' };
+    to = { transform: translate + '(0)' };
+  } else {
+    const pos = (axis === 'Y' ? 'top' : 'left');
     from = {};
     to = {};
     from[pos] = -this['_' + dim];
@@ -465,7 +462,7 @@ Effect.prototype.setPush = function($el, visibility, axis, fwd) {
   }
 
   if (!fwd) {
-    var temp = from;
+    let temp = from;
     from = to;
     to = temp;
 
@@ -474,144 +471,141 @@ Effect.prototype.setPush = function($el, visibility, axis, fwd) {
     active = temp;
   }
 
-  $el.data({to:to}).find('>.br-shape').addClass('br-extend-' + dim).css(from)
-  .find('>.br-' + active).addClass('br-active-side').end()
-  .find('>.br-' + prev).addClass('br-prev-side').css('visibility', visibility);
+  $el.data({ to }).find('>.br-shape').addClass('br-extend-' + dim).css(from)
+    .find('>.br-' + active).addClass('br-active-side').end()
+    .find('>.br-' + prev).addClass('br-prev-side').css('visibility', visibility);
 };
 
 // move helper
-Effect.prototype.setMoveDown = function($el) {
+Effect.prototype.setMoveDown = function ($el) {
   this.setMove($el, 'Y', -this._$container.height());
 };
 
-Effect.prototype.setMoveUp = function($el) {
+Effect.prototype.setMoveUp = function ($el) {
   this.setMove($el, 'Y', this._$container.height());
 };
 
-Effect.prototype.setMoveRight = function($el) {
+Effect.prototype.setMoveRight = function ($el) {
   this.setMove($el, 'X', -this._$container.width());
 };
 
-Effect.prototype.setMoveLeft = function($el) {
+Effect.prototype.setMoveLeft = function ($el) {
   this.setMove($el, 'X', this._$container.width());
 };
 
-Effect.prototype.setMoveRandom = function($el) {
+Effect.prototype.setMoveRandom = function ($el) {
   this.setRandomDirection($el, 'move');
 };
 
-Effect.prototype.setMove = function($el, axis, dist) {
-  var from, to;
+Effect.prototype.setMove = function ($el, axis, dist) {
+  let from, to;
   if (this._transform) {
-    var translate = 'translate' + axis;
-    from = {transform:translate + '(' + dist + 'px)'};
-    to = {transform:translate + '(0)'};
-  }
-  else {
-    if ('Y' === axis) {
-      from = {marginTop:dist};
-      to = {marginTop:0};
-    }
-    else {
-      from = {marginLeft:dist};
-      to = {marginLeft:0};
+    const translate = 'translate' + axis;
+    from = { transform: translate + '(' + dist + 'px)' };
+    to = { transform: translate + '(0)' };
+  } else {
+    if (axis === 'Y') {
+      from = { marginTop: dist };
+      to = { marginTop: 0 };
+    } else {
+      from = { marginLeft: dist };
+      to = { marginLeft: 0 };
     }
   }
 
-  $el.data({to:to}).css(from).find('>.br-shape')
-  .find('>.br-front').addClass('br-active-side').end()
-  .find('>.br-back').hide();
+  $el.data({ to }).css(from).find('>.br-shape')
+    .find('>.br-front').addClass('br-active-side').end()
+    .find('>.br-back').hide();
 };
 
 // rotate helper fns
-Effect.prototype.setRotateDown = function($el) {
+Effect.prototype.setRotateDown = function ($el) {
   this.setRotate($el, 'X', false);
 };
 
-Effect.prototype.setRotateUp = function($el) {
+Effect.prototype.setRotateUp = function ($el) {
   this.setRotate($el, 'X', true);
 };
 
-Effect.prototype.setRotateRight = function($el) {
+Effect.prototype.setRotateRight = function ($el) {
   this.setRotate($el, 'Y', true);
 };
 
-Effect.prototype.setRotateLeft = function($el) {
+Effect.prototype.setRotateLeft = function ($el) {
   this.setRotate($el, 'Y', false);
 };
 
-Effect.prototype.setRotateRandom = function($el) {
+Effect.prototype.setRotateRandom = function ($el) {
   this.setRandomDirection($el, 'rotate', ['up', 'down']);
 };
 
-Effect.prototype.setRotate = function($el, axis, positive) {
-  var transform = 'translateZ(' + (-$el.data('depth')/2) + 'px) rotate' + axis,
-  sign, side;
+Effect.prototype.setRotate = function ($el, axis, positive) {
+  const transform = 'translateZ(' + (-$el.data('depth') / 2) + 'px) rotate' + axis;
+  let sign; let side;
 
   if (positive) {
     sign = '';
     side = (axis === 'X' ? 'bottom' : 'left');
-  }
-  else {
+  } else {
     sign = '-';
     side = (axis === 'X' ? 'top' : 'right');
   }
 
-  $el.data({to:{transform:transform + '(' + sign + '90deg)'}})
-  .find('>.br-shape').css({transform:transform + '(0deg)'})
-  .find('>.br-face-' + side).addClass('br-active-side').end()
-  .find('>.br-face-front').addClass('br-prev-side');
+  $el.data({ to: { transform: transform + '(' + sign + '90deg)' } })
+    .find('>.br-shape').css({ transform: transform + '(0deg)' })
+    .find('>.br-face-' + side).addClass('br-active-side').end()
+    .find('>.br-face-front').addClass('br-prev-side');
 };
 
 // flip helper fns
-Effect.prototype.setFlipDown = function($el) {
+Effect.prototype.setFlipDown = function ($el) {
   this.setFlip($el, 'X', false);
 };
 
-Effect.prototype.setFlipUp = function($el) {
+Effect.prototype.setFlipUp = function ($el) {
   this.setFlip($el, 'X', true);
 };
 
-Effect.prototype.setFlipRight = function($el) {
+Effect.prototype.setFlipRight = function ($el) {
   this.setFlip($el, 'Y', true);
 };
 
-Effect.prototype.setFlipLeft = function($el) {
+Effect.prototype.setFlipLeft = function ($el) {
   this.setFlip($el, 'Y', false);
 };
 
-Effect.prototype.setFlipRandom = function($el) {
+Effect.prototype.setFlipRandom = function ($el) {
   this.setRandomDirection($el, 'flip');
 };
 
-Effect.prototype.setFlip = function($el, axis, positive) {
-  var transform = 'translateZ(' + (-$el.data('depth')/2) + 'px) rotate' + axis,
-  sign = positive ? '' : '-';
+Effect.prototype.setFlip = function ($el, axis, positive) {
+  const transform = 'translateZ(' + (-$el.data('depth') / 2) + 'px) rotate' + axis;
+  const sign = positive ? '' : '-';
 
-  $el.data({to:{transform:transform + '(' + sign + '180deg)'}})
-  .find('>.br-shape').css({transform:transform + '(0deg)'})
-  .find('>.br-face-front').addClass('br-prev-side').end()
-  .find('>.br-face-back').addClass('br-active-side').toggleClass('br-inverted', axis === 'X');
+  $el.data({ to: { transform: transform + '(' + sign + '180deg)' } })
+    .find('>.br-shape').css({ transform: transform + '(0deg)' })
+    .find('>.br-face-front').addClass('br-prev-side').end()
+    .find('>.br-face-back').addClass('br-active-side').toggleClass('br-inverted', axis === 'X');
 };
 
 // fade effect
-Effect.prototype.fade = function() {
-  var selector = '>.br-shape';
-  this._$el.data({selector:selector, to:{opacity:1}})
-  .find(selector).css({opacity:0})
-  .find('>.br-front').addClass('br-active-side').end()
-  .find('>.br-back').hide();
+Effect.prototype.fade = function () {
+  const selector = '>.br-shape';
+  this._$el.data({ selector, to: { opacity: 1 } })
+    .find(selector).css({ opacity: 0 })
+    .find('>.br-front').addClass('br-active-side').end()
+    .find('>.br-back').hide();
 };
 
 // zoom effect
-Effect.prototype.zoom = function() {
-  var front = 'br-active-side', 
-  back = 'br-prev-side',
-  from = {opacity:1, transform:'scale(1)'},
-  to = {opacity:0, transform:'scale(2)'};
+Effect.prototype.zoom = function () {
+  let front = 'br-active-side';
+  let back = 'br-prev-side';
+  let from = { opacity: 1, transform: 'scale(1)' };
+  let to = { opacity: 0, transform: 'scale(2)' };
 
-  if ('out' === this._direction) {
-    var temp = from;
+  if (this._direction === 'out') {
+    let temp = from;
     from = to;
     to = temp;
 
@@ -620,116 +614,110 @@ Effect.prototype.zoom = function() {
     back = temp;
   }
 
-  this._$el.data({selector:'>.br-shape>.br-back', to:to})
-  .find('>.br-shape').addClass('br-stack')
-  .find('>.br-front').addClass(front).end()
-  .find('>.br-back').addClass(back).css(from);
+  this._$el.data({ selector: '>.br-shape>.br-back', to })
+    .find('>.br-shape').addClass('br-stack')
+    .find('>.br-front').addClass(front).end()
+    .find('>.br-back').addClass(back).css(from);
 };
 
 // expand effect
-Effect.prototype.expand = function() {
-  var selector = '>.br-shape',
-  from, to;
+Effect.prototype.expand = function () {
+  const selector = '>.br-shape';
+  let from; let to;
 
   if (this._transform) {
-    from = {transform:'scale(0)'};
-    to = {transform:'scale(1)'};
-  }
-  else {
-    from = {width:0, height:0};
-    to = {width:this._width, height:this._height};
+    from = { transform: 'scale(0)' };
+    to = { transform: 'scale(1)' };
+  } else {
+    from = { width: 0, height: 0 };
+    to = { width: this._width, height: this._height };
   }
 
-  this._$el.data({selector:selector, to:to})
-  .find(selector).css(from)
-  .find('>.br-front').addClass('br-active-side').end()
-  .find('>.br-back').hide();
+  this._$el.data({ selector, to })
+    .find(selector).css(from)
+    .find('>.br-front').addClass('br-active-side').end()
+    .find('>.br-back').hide();
 };
 
 // push effect
-Effect.prototype.push = function() {
+Effect.prototype.push = function () {
   if (this._alternate) {
     this.setAlternate('push');
-  }
-  else {
+  } else {
     this[this.setFn('push', this._direction)](this._$el);
   }
 
-  this._$el.data({selector:'>.br-shape'});
+  this._$el.data({ selector: '>.br-shape' });
 };
 
 // cover transition
-Effect.prototype.cover = function() {
+Effect.prototype.cover = function () {
   if (this._alternate) {
     this.setAlternate('cover');
-  }
-  else {
+  } else {
     this[this.setFn('cover', this._direction)](this._$el);
   }
 
-  this._$el.data({selector:'>.br-shape'});
+  this._$el.data({ selector: '>.br-shape' });
 };
 
 // slide transition
-Effect.prototype.slide = function() {
+Effect.prototype.slide = function () {
   this._autoReverse = true;
   this._direction = this.getOpposite(this._direction);
 
   if (this._alternate) {
     this.setAlternate('push');
-  }
-  else {
+  } else {
     this[this.setFn('push', this._direction)](this._$el);
   }
 
-  this._$el.data({selector:'>.br-shape'});
+  this._$el.data({ selector: '>.br-shape' });
 };
 
 // move transition
-Effect.prototype.move = function() {
+Effect.prototype.move = function () {
   this._isReverse = !this._isReverse;
   this[this.setFn('move', this._direction)](this._$el);
 };
 
 // flip transition
-Effect.prototype.flip = function() {
-  this._$el.data({selector:'>.br-shape', depth:this._shapeDepth});
+Effect.prototype.flip = function () {
+  this._$el.data({ selector: '>.br-shape', depth: this._shapeDepth });
   if (this._alternate) {
     this.setAlternate('flip');
-  }
-  else {
+  } else {
     this[this.setFn('flip', this._direction)](this._$el);
   }
 };
 
 // rotate transition
-Effect.prototype.rotate = function() {
-  this._$el.data({selector:'>.br-shape', depth:('left' === this._direction || 'right' === this._direction ? this._width : this._height)});
+Effect.prototype.rotate = function () {
+  this._$el.data({ selector: '>.br-shape', depth: (this._direction === 'left' || this._direction === 'right' ? this._width : this._height) });
   if (this._alternate) {
     this.setAlternate('rotate');
-  }
-  else {
+  } else {
     this[this.setFn('rotate', this._direction)](this._$el);
   }
 };
 
-Effect.prototype.start = function(opts) {
+Effect.prototype.start = function (opts) {
   this._progress = true;
 
-  $.each(Effect.DATA, $.proxy(function(i, val) {
+  $.each(Effect.DATA, $.proxy(function (i, val) {
     this['_' + val] = opts[val];
   }, this));
 
   this._columns = getPosInt(this._columns, 1);
   this._rows = getPosInt(this._rows, 1);
-  this._width = Math.ceil(this._$container.width()/this._columns);
-  this._height = Math.ceil(this._$container.height()/this._rows);
+  this._width = Math.ceil(this._$container.width() / this._columns);
+  this._height = Math.ceil(this._$container.height() / this._rows);
 
-  if ('random' === this._effect) {
+  if (this._effect === 'random') {
     this.setRandomEffect();
   }
 
-  this._is3D = -1 < $.inArray(this._effect, ['flip', 'rotate']);
+  this._is3D = $.inArray(this._effect, ['flip', 'rotate']) > -1;
   if (this._is3D && !this._support3d) {
     this._effect = 'push';
     this._is3D = false;
@@ -739,47 +727,46 @@ Effect.prototype.start = function(opts) {
   this._shapeDepth = getNonNegInt(this._shapeDepth, 0);
   this.initDirection();
   this.initOrder();
-  this._isReverse = -1 < $.inArray(this._order, Effect.REVERSE);
-  this._hideItems = -1 < $.inArray(this._effect, ['flip', 'push', 'rotate', 'slide', 'zoom']);
+  this._isReverse = $.inArray(this._order, Effect.REVERSE) > -1;
+  this._hideItems = $.inArray(this._effect, ['flip', 'push', 'rotate', 'slide', 'zoom']) > -1;
 
   this.createElements();
   this[this._effect]();
   this.initElements();
 
-  var arr = this.getElementArray(),
-  duration = getNonNegInt(opts.duration, $.fn.bannerRotator.defaults.duration),
-  easing = opts.easing;
+  const arr = this.getElementArray();
+  const duration = getNonNegInt(opts.duration, $.fn.bannerRotator.defaults.duration);
+  const easing = opts.easing;
 
   this.animate(arr, duration, easing);
 };
 
-Effect.prototype.setRandomEffect = function() {
-  var type = this.getType(),
-  preset = getRandomItem(PRESETS[type]);
+Effect.prototype.setRandomEffect = function () {
+  const type = this.getType();
+  const preset = getRandomItem(PRESETS[type]);
 
-  $.each(['effect', 'direction', 'order'], $.proxy(function(i, val) {
+  $.each(['effect', 'direction', 'order'], $.proxy(function (i, val) {
     this['_' + val] = preset[val];
   }, this));
 };
 
 // get diagonal array
-Effect.prototype.getDiagonalArray = function(order) {
-  var elArray = [],
-  start = 0, 
-  end = (this._rows - 1) + (this._columns - 1) + 1,
-  flip = ('downLeft' === order || 'upRight' === order);
+Effect.prototype.getDiagonalArray = function (order) {
+  const elArray = [];
+  let start = 0;
+  const end = (this._rows - 1) + (this._columns - 1) + 1;
+  const flip = (order === 'downLeft' || order === 'upRight');
 
   while (start != end) {
     let i = Math.min(this._rows - 1, start);
     let j;
-    while(i >= 0) {
+    while (i >= 0) {
       if (flip) {
         j = (this._columns - 1) - Math.abs(i - start);
         if (j < 0) {
           break;
         }
-      }
-      else {
+      } else {
         j = Math.abs(i - start);
         if (j >= this._columns) {
           break;
@@ -796,22 +783,21 @@ Effect.prototype.getDiagonalArray = function(order) {
 };
 
 // get zig-zag array
-Effect.prototype.getZigZagArray = function(order) {
-  var i = 0, 
-  j = 0, 
-  fwd = true,
-  elArray = [],
-  total = this._$el.length,
-  count;
+Effect.prototype.getZigZagArray = function (order) {
+  let i = 0;
+  let j = 0;
+  let fwd = true;
+  const elArray = [];
+  const total = this._$el.length;
+  let count;
 
-  if ('zigZagUp' === order || 'zigZagDown' === order) {
+  if (order === 'zigZagUp' || order === 'zigZagDown') {
     for (count = 0; count < total; count++) {
       elArray[count] = this._$el.eq(i * this._columns + j);
 
-      if (fwd) { 
+      if (fwd) {
         j++;
-      }
-      else {
+      } else {
         j--;
       }
 
@@ -821,15 +807,13 @@ Effect.prototype.getZigZagArray = function(order) {
         i++;
       }
     }
-  }
-  else {
+  } else {
     for (count = 0; count < total; count++) {
       elArray[count] = this._$el.eq(i * this._columns + j);
 
-      if (fwd) { 
+      if (fwd) {
         i++;
-      }
-      else {
+      } else {
         i--;
       }
 
@@ -845,17 +829,16 @@ Effect.prototype.getZigZagArray = function(order) {
 };
 
 // get directional array
-Effect.prototype.getDirectionalArray = function(order) {
-  var elArray;
-  if ('right' === order || 'left' === order) {
+Effect.prototype.getDirectionalArray = function (order) {
+  let elArray;
+  if (order === 'right' || order === 'left') {
     elArray = [];
-    for (var j = 0; j < this._columns; j++) {
-      for (var i = 0; i < this._rows; i++) {
+    for (let j = 0; j < this._columns; j++) {
+      for (let i = 0; i < this._rows; i++) {
         elArray.push(this._$el.eq(i * this._columns + j));
       }
     }
-  }
-  else {
+  } else {
     elArray = this._$el.toArray();
   }
 
@@ -863,58 +846,58 @@ Effect.prototype.getDirectionalArray = function(order) {
 };
 
 // get spiral array
-Effect.prototype.getSpiralArray = function() {
-  var i = 0, 
-  j = 0,
-  rowCount = this._rows - 1,
-  colCount = this._columns - 1,
-  dir = 0,
-  limit = colCount,
-  elArray = [];
+Effect.prototype.getSpiralArray = function () {
+  let i = 0;
+  let j = 0;
+  let rowCount = this._rows - 1;
+  let colCount = this._columns - 1;
+  let dir = 0;
+  let limit = colCount;
+  const elArray = [];
 
-  while (rowCount >= 0 && colCount >=0) {
-    var count = 0; 
-    while(true) { 
+  while (rowCount >= 0 && colCount >= 0) {
+    let count = 0;
+    while (true) {
       elArray.push(this._$el.eq(i * this._columns + j));
       if ((++count) > limit) {
         break;
       }
-      switch(dir) {
+      switch (dir) {
+        case 0:
+          j++;
+          break;
+        case 1:
+          i++;
+          break;
+        case 2:
+          j--;
+          break;
+        case 3:
+          i--;
+          break;
+      }
+    }
+    switch (dir) {
       case 0:
-        j++;
-        break;
-      case 1:
+        dir = 1;
+        limit = (--rowCount);
         i++;
         break;
-      case 2:
+      case 1:
+        dir = 2;
+        limit = (--colCount);
         j--;
         break;
-      case 3:
+      case 2:
+        dir = 3;
+        limit = (--rowCount);
         i--;
         break;
-      }
-    } 
-    switch(dir) {
-    case 0:
-      dir = 1;
-      limit = (--rowCount);
-      i++;
-      break;
-    case 1:
-      dir = 2;
-      limit = (--colCount);
-      j--;
-      break;
-    case 2:
-      dir = 3;
-      limit = (--rowCount);
-      i--;
-      break;
-    case 3:
-      dir = 0;
-      limit = (--colCount);
-      j++;
-      break;
+      case 3:
+        dir = 0;
+        limit = (--colCount);
+        j++;
+        break;
     }
   }
 
@@ -923,7 +906,7 @@ Effect.prototype.getSpiralArray = function() {
 
 Effect.DATA = ['effect', 'columns', 'rows', 'interval', 'direction', 'order', 'alternate', 'autoReverse', 'depth', 'shapeColor', 'shapeShading', 'shapeDepth'];
 
-Effect.CUBOID= '<div class="br-cuboid br-shape">\
+Effect.CUBOID = '<div class="br-cuboid br-shape">\
 <div class="br-face-front"></div>\
 <div class="br-face-back"></div>\
 <div class="br-face-left"></div>\
@@ -946,18 +929,18 @@ Effect.GRID = 'grid';
 Effect.EFFECTS = ['cover', 'expand', 'fade', 'flip', 'move', 'push', 'rotate', 'slide', 'zoom'];
 
 Effect.OPPOSITE = {
-  down:'up',
-  right:'left',
-  downLeft:'upRight',
-  downRight:'upLeft',
-  spiralIn:'spiralOut',
-  zigZagDown:'zigZagUp',
-  zigZagRight:'zigZagLeft'
+  down: 'up',
+  right: 'left',
+  downLeft: 'upRight',
+  downRight: 'upLeft',
+  spiralIn: 'spiralOut',
+  zigZagDown: 'zigZagUp',
+  zigZagRight: 'zigZagLeft'
 };
 
-(function() {
+(function () {
   Effect.REVERSE = [];
-  $.each(Effect.OPPOSITE, function(key, val) {
+  $.each(Effect.OPPOSITE, function (key, val) {
     Effect.OPPOSITE[val] = key;
     Effect.REVERSE.push(val);
   });
@@ -966,32 +949,32 @@ Effect.OPPOSITE = {
   Effect.ORDERS.push('random');
 }());
 
-(function() {
+(function () {
   Effect.SINES = [];
   Effect.FLIP_PCT = [];
-  var num = 20,
-  radian = Math.PI,
-  step = radian/num;
+  const num = 20;
+  let radian = Math.PI;
+  const step = radian / num;
 
-  for (var i = 0; i <= num; i++) {
-    Effect.FLIP_PCT[i] = Math.round(i/num * 100) + '%';
+  for (let i = 0; i <= num; i++) {
+    Effect.FLIP_PCT[i] = Math.round(i / num * 100) + '%';
     Effect.SINES[i] = roundTo(Math.sin(radian), 5);
     radian -= step;
   }
 }());
 
-(function() {
+(function () {
   Effect.COSINES = [];
   Effect.ROTATE_PCT = [];
-  var num = 45,
-  radian = degreesToRadians(45),
-  step = radian/(num/2);
+  const num = 45;
+  let radian = degreesToRadians(45);
+  let step = radian / (num / 2);
 
-  for (var i = 0; i <= num; i++) {
-    Effect.ROTATE_PCT[i] = Math.round(i/num * 100) + '%';
+  for (let i = 0; i <= num; i++) {
+    Effect.ROTATE_PCT[i] = Math.round(i / num * 100) + '%';
     Effect.COSINES[i] = roundTo(Math.cos(radian), 5);
     radian -= step;
-    if (0 >= radian) {
+    if (radian <= 0) {
       step = -step;
     }
   }
