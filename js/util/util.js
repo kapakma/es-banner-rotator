@@ -12,7 +12,7 @@ export function getPosition (val) {
   const props = {};
   let arr = val.split(' ', 2);
 
-  if (2 !== arr.length) {
+  if (arr.length !== 2) {
     arr = camelToDash(val).split('-');
   }
 
@@ -46,12 +46,12 @@ export function withinRange (val, min, max) {
 
 // test for none
 export function isNone (val) {
-  return (typeof val === 'undefined' || false === val || 'none' === val);
+  return (typeof val === 'undefined' || val === false || val === 'none');
 }
 
 // check if empty string
 export function isEmptyStr (val) {
-  return (typeof val === 'undefined' || '' === $.trim(val));
+  return (typeof val === 'undefined' || $.trim(val) === '');
 }
 
 // get integer
@@ -63,13 +63,13 @@ export function getInt (val, defaultVal) {
 // get positive integer
 export function getPosInt (val, defaultVal) {
   val = parseInt(val, 10);
-  return ($.isNumeric(val) && 0 < val ? val : defaultVal);
+  return ($.isNumeric(val) && val > 0 ? val : defaultVal);
 }
 
 // get non-negative integer
 export function getNonNegInt (val, defaultVal) {
   val = parseInt(val, 10);
-  return ($.isNumeric(val) && 0 <= val ? val : defaultVal);
+  return ($.isNumeric(val) && val >= 0 ? val : defaultVal);
 }
 
 // get float
@@ -85,14 +85,14 @@ export function getValue (val, defaultVal) {
 
 // get enum value
 export function getEnum (val, list, defaultVal) {
-  return (-1 < $.inArray(val, list) ? val : defaultVal);
+  return ($.inArray(val, list) > -1 ? val : defaultVal);
 }
 
 // check for percent
 export function isPercent (val) {
   val += '';
   const last = val.length - 1;
-  return '%' === val.charAt(last) && $.isNumeric(val.substring(0, last));
+  return val.charAt(last) === '%' && $.isNumeric(val.substring(0, last));
 }
 
 // round to
@@ -138,7 +138,7 @@ export function isAndroid (version) {
   const ua = navigator.userAgent.toLowerCase();
   const index = ua.indexOf(android);
 
-  return (-1 < index && (typeof version === 'undefined' || parseFloat(ua.substring(index + android.length)) <= version));
+  return (index > -1 && (typeof version === 'undefined' || parseFloat(ua.substring(index + android.length)) <= version));
 }
 
 // is chrome check
@@ -160,7 +160,7 @@ export function dashToCamel (str) {
 
 // check css property support
 export function propertySupport (prop, val) {
-  if (false === prop) {
+  if (prop === false) {
     return false;
   }
 
@@ -168,7 +168,7 @@ export function propertySupport (prop, val) {
   let el = document.createElement('div');
 
   el.style[dashProp] = val;
-  const support = -1 < (el.style[dashProp] + '').indexOf(val);
+  const support = (el.style[dashProp] + '').indexOf(val) > -1;
   el = null;
 
   return support;
@@ -187,7 +187,7 @@ export function filterSupport () {
 // shuffle array
 export function shuffleArray (arr) {
   let i = arr.length;
-  while (0 < --i) {
+  while (--i > 0) {
     const ri = Math.floor(Math.random() * (i + 1));
     const temp = arr[i];
     arr[i] = arr[ri];

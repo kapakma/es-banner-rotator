@@ -3,7 +3,7 @@
  * Copyright (c) 2023 Allan Ma
  */
 
-"use strict";
+'use strict';
 
 import KBurns from './components/KenBurns.js';
 import Effect from './components/Effect.js';
